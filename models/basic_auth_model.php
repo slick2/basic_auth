@@ -58,6 +58,24 @@ class basic_auth_model extends CI_Model
         
     }
     
+    public function deactivate($identity){
+         $users_table = $this->tables['users'];
+        
+        if ($identity === false)
+        {
+            return false;
+        }
+        
+        $activation_code = sha1(md5(microtime()));
+        $this->activation_code = $activation_code;
+        
+        $data = array('activation_code' => $activation_code,'active'=>0);
+        
+        $this->db->update($users_table, $data, array($this->identity_column => $identity));
+        
+        return ($this->db->affected_rows() == 1) ? true : false;
+    }
+    
     public function check_identity($identity){
         
         

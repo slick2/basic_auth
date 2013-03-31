@@ -20,7 +20,7 @@
  * Email Activation for registration
  **/
 
- $config['email_activation'] = false;
+ $config['email_activation'] = true;
 
 /**
  * tables
@@ -36,10 +36,10 @@
 
 /**
  * Folder where email templates are stored.
- * Default : basic_auth/email/
+ * Default : /views/auth/email/
  **/
  
- $config['email_templates'] = 'basic_auth/email';
+ $config['email_templates'] = 'auth/email/';
 
  /**
   * Salt Length

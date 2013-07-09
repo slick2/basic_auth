@@ -1,5 +1,5 @@
-<form method="POST" action="<? echo base_url()?>auth/register">
-    <? echo validation_errors(); ?>
+<form method="POST" action="<?php echo base_url()?>auth/register">
+    <?php echo validation_errors(); ?>
 	<div>
 	    <div>
 	        <label>First Name</label>
@@ -13,18 +13,18 @@
 	    </div>
 	    
 	    <div>
-			<label><? echo $identity=='email' ? 'Email' : 'Username'?></label>
+			<label><?php echo $identity=='email' ? 'Email' : 'Username'?></label>
 			<input type="text" name="email" value="<? echo set_value('email')?>"/>
 		</div>
 		
-		<? if($identity != 'email'): // don't require email if the identity is email ?>
+		<?php if($identity != 'email'): // don't require email if the identity is email ?>
 		
 		<div>
             <label>Email</label>
             <input type="text" name="username" value="<? echo set_value('username')?>" />
         </div>
         
-		<? endif; ?>
+		<?php endif; ?>
 		
 		
 		<div>

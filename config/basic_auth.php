@@ -16,6 +16,15 @@
 
  $config['identity'] = 'email';
 
+ /**
+  * Confirm code
+  *
+  **/
+
+  $config['confirm_salt'] = 'basic_auth';//change this as needed
+
+
+
 /**
  * Email Activation for registration
  **/

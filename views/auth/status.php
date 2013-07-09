@@ -1,7 +1,7 @@
-<? $message = $this->session->flashdata('message');?>
+<?php $message = $this->session->flashdata('message');?>
 
-<? if(!empty($message)):?>
+<?php if(!empty($message)):?>
 <div>
-    <? echo $message;?>
+    <?php echo $message;?>
 </div>
-<? endif;?>
+<?php endif;?>

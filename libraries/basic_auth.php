@@ -1,21 +1,22 @@
 <?php
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 class basic_auth
 {
-    private $errors = array();
 
+    private $errors = array();
     private $identiy_column;
     private $email_templates;
 
     public function __construct()
     {
-        $this -> load -> config('basic_auth');
-        $this -> load -> model('basic_auth_model', 'Basic_Auth');
-        $this -> load -> library('email');
+        $this->load->config('basic_auth');
+        $this->load->model('basic_auth_model', 'Basic_Auth');
+        $this->load->library('email');
 
-        $this -> identity_column = $this -> config -> item('identity');
+        $this->identity_column = $this->config->item('identity');
 
         //prep the email
         $this->email_templates = $this->config->item('email_templates');
@@ -23,7 +24,7 @@ class basic_auth
 
     public function __get($var)
     {
-        return get_instance() -> $var;
+        return get_instance()->$var;
     }
 
     public function activate($code)
@@ -36,7 +37,6 @@ class basic_auth
         //TODO : change password by identity username
 
         return $this->Basic_Auth->change_password($identity, $new);
-
     }
 
     public function deactivate($identity)
@@ -49,29 +49,27 @@ class basic_auth
         //TODO: forgotten password
     }
 
-    public function forgotten_password_complete($code) {
+    public function forgotten_password_complete($code)
+    {
         //TODO: forgotten password complete
-
     }
 
     public function is_logged()
     {
         $identity = $this->config->item('identity');
         return ($this->session->userdata($identity)) ? TRUE : FALSE;
-
     }
 
-    public function get_info($email){
+    public function get_info($email)
+    {
         return $this->Basic_Auth->get_info($email);
-
     }
 
     public function login($identity, $password)
     {
-        switch($this->config->item('basic_auth_mode'))
-        {
+        switch ($this->config->item('basic_auth_mode')) {
             case 1 :
-                $password = $this -> hash_password($password);
+                $password = $this->hash_password($password);
                 break;
 
             case 2 :
@@ -85,14 +83,11 @@ class basic_auth
         }
         $profile = $this->Basic_Auth->login($identity, $password);
 
-        if (!empty($profile))
-        {
+        if (!empty($profile)) {
             $this->session->set_userdata($this->identity_column, $identity);
             return true;
-        }
-        else
-        {
-            $this->errors[] = 'The '.$this->identity_column.' and password does not match';
+        } else {
+            $this->errors[] = 'The ' . $this->identity_column . ' and password does not match';
         }
 
         return false;
@@ -110,19 +105,18 @@ class basic_auth
         //TODO : profile
     }
 
-    public  function exist_email($email)
+    public function exist_email($email)
     {
-         return $this->Basic_Auth->exist_email($email);
+        return $this->Basic_Auth->exist_email($email);
     }
 
     public function register($data)
     {
         //check the data first
-        switch($this->config->item('basic_auth_mode'))
-        {
+        switch ($this->config->item('basic_auth_mode')) {
             case 1 :
                 //secure with salt
-                $data['password'] = $this -> hash_password($data['password']);
+                $data['password'] = $this->hash_password($data['password']);
                 break;
             case 2 :
                 //semi not secured it is just encoded
@@ -131,36 +125,34 @@ class basic_auth
             case 3 :
             //stupid, uncrypted password
             default
-            ;
+                ;
                 $data['password'] = $data['password'];
                 break;
         }
 
-        $this -> Basic_Auth -> register($data);
+        $this->Basic_Auth->register($data);
 
-        if($this->config->item('email_activation'))
-        {
+        if ($this->config->item('email_activation')) {
             $this->Basic_Auth->deactivate($data[$this->identity_column]);
-            $email_activation=array(
-                'email'=>$data['email'],
-                'activation'=>$this->Basic_Auth->activation_code
+            $email_activation = array(
+                'email' => $data['email'],
+                'activation' => $this->Basic_Auth->activation_code
             );
             $this->email_activation($data['email'], $email_activation);
         }
         return TRUE;
     }
 
-    public function hash_password($password=FALSE)
+    public function hash_password($password = FALSE)
     {
-        $salt_length=$this->config->item('salt_length');
+        $salt_length = $this->config->item('salt_length');
 
-        if($password===FALSE)
-        {
+        if ($password === FALSE) {
             return FALSE;
         }
         $salt = $this->salt();
 
-        $password = $salt.substr(sha1($salt.$password), 0, -$salt_length);
+        $password = $salt . substr(sha1($salt . $password), 0, -$salt_length);
 
         return $password;
     }
@@ -172,20 +164,21 @@ class basic_auth
 
     public function errors()
     {
-        return $this -> errors;
+        return $this->errors;
     }
 
-    public function email_activation($email, $data=array())
+    public function email_activation($email, $data = array())
     {
 
-            $message = $this->load->view($this->email_templates.'activation', $data);
-            $this->email->clear();
-            $this->email->set_newline("\r\n");
-            $this->email->from('', '');
-            $this->email->to($email);
-            $this->email->subject('Email Activation (Registration)');
-            $this->email->message($message);
+        $message = $this->load->view($this->email_templates . 'activation', $data);
+        $this->email->clear();
+        $this->email->set_newline("\r\n");
+        $this->email->from('', '');
+        $this->email->to($email);
+        $this->email->subject('Email Activation (Registration)');
+        $this->email->message($message);
 
-            return $this->email->send();
+        return $this->email->send();
     }
+
 }

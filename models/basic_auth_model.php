@@ -1,17 +1,19 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 class basic_auth_model extends CI_Model
 {
- 
+
     public $tables = array();
-    
     public $identity_column;
     
     public function __construct()
     {
         parent::__construct();
         $this->load->config('basic_auth');
-        $this->tables  = $this->config->item('tables');
+        $this->tables = $this->config->item('tables');
         $this->identity_column = $this->config->item('identity');
     }
 
@@ -21,18 +23,15 @@ class basic_auth_model extends CI_Model
     public function login($identity, $password)
     {
 
-        $query = $this->db->select($this->identity_column.', password, activation_code ')
-            ->from($this->tables['users'])
-            ->where($this->identity_column, $identity)
-            ->where('password', $password)
-            ->get();
+        $query = $this->db->select($this->identity_column . ', password, activation_code ')
+                ->from($this->tables['users'])
+                ->where($this->identity_column, $identity)
+                ->where('password', $password)
+                ->get();
 
-        if($query->num_rows() ==1)
-        {
+        if ($query->num_rows() == 1) {
             return $query->row_array();
-        }
-        else
-        {
+        } else {
             return array();
         }
     }
@@ -40,7 +39,6 @@ class basic_auth_model extends CI_Model
     /**
      * Register
      */
-    
     public function register($data)
     {
         $this->db->insert($this->tables['users'], $data);
@@ -49,35 +47,30 @@ class basic_auth_model extends CI_Model
     /**
      * Change password
      */
-
-    public function change_password($identity=NULL, $new=NULL)
+    public function change_password($identity = NULL, $new = NULL)
     {
-        if(empty($new) OR empty($identity))
-        {
+        if (empty($new) OR empty($identity)) {
             return FALSE;
         }
         $data = array
-        (
-            'password'=>$new
+            (
+            'password' => $new
         );
         return $this->db->where($this->identity_column, $identity)
-            ->update($this->tables['users'], $data);
+                        ->update($this->tables['users'], $data);
     }
-
-
 
     public function deactivate($identity)
     {
         $users_table = $this->tables['users'];
-        if ($identity === false)
-        {
+        if ($identity === false) {
             return false;
         }
 
         $activation_code = sha1(md5(microtime()));
         $this->activation_code = $activation_code;
 
-        $data = array('activation_code' => $activation_code,'active'=>0);
+        $data = array('activation_code' => $activation_code, 'active' => 0);
 
         $this->db->update($users_table, $data, array($this->identity_column => $identity));
 
@@ -86,28 +79,25 @@ class basic_auth_model extends CI_Model
 
     public function check_identity($identity)
     {
-
-
+        
     }
 
     public function exist_email($email)
     {
-        $query = $this->db->get_where('users', array('email'=>$email));
-        if($query->num_rows())
-        {
+        $query = $this->db->get_where('users', array('email' => $email));
+        if ($query->num_rows()) {
             return TRUE;
-        }
-        else
-        {
+        } else {
             return FALSE;
         }
     }
 
     public function get_info($email)
     {
-        $result=array();
-        $query = $this->db->get_where('users', array('email'=>$email));
+        $result = array();
+        $query = $this->db->get_where('users', array('email' => $email));
         $result = $query->result_array();
         return $result;
     }
+
 }

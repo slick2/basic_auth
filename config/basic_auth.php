@@ -1,8 +1,13 @@
 <?php
-
 if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
-
+	exit('No direct script access allowed');
+/**
+ * Basic Auth Configuration
+ * @package Basic Auth
+ * @author Carey Dayrit <code@webpagecoders.com>
+ * @version 1.0
+ * 
+ */
 /**
  * mode 
  * 1 - feeling secured
@@ -24,7 +29,6 @@ $config['identity'] = 'email';
 $config['confirm_salt'] = 'basic_auth'; //change this as needed
 
 
-
 /**
  * Email Activation for registration
  * */
@@ -42,11 +46,7 @@ $config['tables'] = array('users' => 'users', 'groups' => 'groups');
  */
 $config['default_group'] = 2;
 
-/**
- * Folder where email templates are stored.
- * Default : /views/auth/email/
- * */
-$config['email_templates'] = 'auth/email/';
+
 
 /**
  * Salt Length

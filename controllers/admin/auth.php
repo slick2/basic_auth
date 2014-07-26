@@ -31,7 +31,15 @@ class Auth extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('admin/auth/index');
+		//check 
+		if($this->basic_auth->is_logged())
+		{
+			$this->load->view('admin/auth/index');
+		}
+		else
+		{	
+			redirect('/admin/auth/login');
+		}
 	}
 
 	/**
@@ -42,9 +50,11 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_rules('login', 'Login', 'required');
 		$this->form_validation->set_rules('password', 'password', 'required');
 
-		if ($this->form_validation->run() == FALSE)
+		$this->basic_auth->change_password('admin@admin.com', 'password');
+		
+		if ($this->form_validation->run() === FALSE)
 		{
-			$this->load->view('backend/auth/login');
+			$this->load->view('admin/auth/login');
 		}
 		else
 		{
@@ -52,11 +62,9 @@ class Auth extends CI_Controller {
 			$password = $this->input->post('password');
 			$result = $this->basic_auth->login($login, $password);
 
-
-
 			if ($result)
 			{
-				redirect('/admin/campaigns');
+				redirect('/admin/auth/');
 			}
 			else
 			{

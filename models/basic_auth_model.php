@@ -7,7 +7,7 @@ if (!defined('BASEPATH'))
  * @version 1.0
  * @author Carey Dayrit <code@webpagecoders.com>
  */
-class basic_auth_model extends CI_Model {
+class Basic_auth_model extends CI_Model {
 
 	public $tables = array();
 	public $identity_column;
@@ -21,7 +21,10 @@ class basic_auth_model extends CI_Model {
 	}
 
 	/**
-	 * Login
+	 * Method: Login
+	 * @param string $identity
+	 * @param string $password
+	 * @return array
 	 */
 	public function login($identity, $password)
 	{
@@ -43,7 +46,8 @@ class basic_auth_model extends CI_Model {
 	}
 
 	/**
-	 * Register
+	 * Method: Register
+	 * @param array $data
 	 */
 	public function register($data)
 	{
@@ -51,7 +55,10 @@ class basic_auth_model extends CI_Model {
 	}
 
 	/**
-	 * Change password
+	 * Method: change_password
+	 * @param string $identity
+	 * @param string $new
+	 * @return boolean
 	 */
 	public function change_password($identity = NULL, $new = NULL)
 	{
@@ -67,12 +74,17 @@ class basic_auth_model extends CI_Model {
 						->update($this->tables['users'], $data);
 	}
 
+	/**
+	 * Method: deactivate
+	 * @param string $identity
+	 * @return boolean
+	 */
 	public function deactivate($identity)
 	{
 		$users_table = $this->tables['users'];
-		if ($identity === false)
+		if ($identity === FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		$activation_code = sha1(md5(microtime()));
@@ -85,6 +97,11 @@ class basic_auth_model extends CI_Model {
 		return ($this->db->affected_rows() == 1) ? true : false;
 	}
 
+	/**
+	 * Method: check_identity
+	 * @param string $identity
+	 * @return boolean
+	 */
 	public function check_identity($identity)
 	{
 		$query = $this->db->where($this->identity_column, $identity)
@@ -100,6 +117,11 @@ class basic_auth_model extends CI_Model {
 		}
 	}
 
+	/**
+	 * Method: exists_email
+	 * @param string $email
+	 * @return boolean
+	 */
 	public function exist_email($email)
 	{
 		$query = $this->db->get_where('users', array('email' => $email));
@@ -113,6 +135,11 @@ class basic_auth_model extends CI_Model {
 		}
 	}
 
+	/**
+	 * Method: get_info
+	 * @param string $email
+	 * @return array
+	 */
 	public function get_info($email)
 	{
 		$result = array();

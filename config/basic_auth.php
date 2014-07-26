@@ -14,7 +14,7 @@ if (!defined('BASEPATH'))
  * 2 - semi secured
  * 3 - stupid (saves unencrypted password on the database)
  */
-$config['basic_auth_mode'] = 3;
+$config['basic_auth_mode'] = 1;
 
 /**
  * A database column which is used to
@@ -28,6 +28,7 @@ $config['identity'] = 'email';
  * */
 $config['confirm_salt'] = 'basic_auth'; //change this as needed
 
+$config['salt'] = 'asdfasdfababasdgasdf';
 
 /**
  * Email Activation for registration

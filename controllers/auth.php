@@ -92,6 +92,7 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_rules('login', 'Login', 'required');
 		$this->form_validation->set_rules('password', 'password', 'required');
 
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$this->load->view('auth/login');
@@ -193,7 +194,7 @@ class Auth extends CI_Controller {
 				//flash message
 				$this->session->set_flashdata('password_reset', 'Success password has been reset');
 				//redirect to login
-				redirect('/auth/login');
+				redirect('/admin/auth/login');
 			}
 		}
 		$data['code_status'] = $code_status;

@@ -1,3 +1,5 @@
+<?php $this->load->view('admin/common/header'); ?>
+
 <?php if ($code_status == TRUE): ?>
     <!-- Change password form -->
     <form method="post" action="">
@@ -22,3 +24,5 @@
     <!-- Notification of wrong code -->
     <p>The reset code is invalid</p>
 <?php endif; ?>
+
+<?php $this->load->view('admin/common/footer'); ?>

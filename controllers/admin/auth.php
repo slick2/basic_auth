@@ -3,6 +3,7 @@ if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
 /**
+ * Controller: Auth
  * @package Basic Auth
  * @version 1.0
  * @author Carey Dayrit <code@webpagecoders.com>

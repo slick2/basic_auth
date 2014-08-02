@@ -2,7 +2,7 @@
 
 <?php if ($code_status == TRUE): ?>
     <!-- Change password form -->
-    <form method="post" action="">
+    <form method="post" >
         <div>
             <?php echo validation_errors(); ?>
         </div>

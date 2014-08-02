@@ -10,6 +10,24 @@ if (!defined('BASEPATH'))
 class Auth extends CI_Controller {
 
 	/**
+	 * Description: put here the landing page after login, make sure the views
+	 * is named after this setup.
+	 * 
+	 * Example:
+	 * Redirect to /admin/dashboard 
+	 * there should be a controller /admin/dashboard.php
+	 * there should be a view /views/admin/dashboard.php 
+	 * 
+	 * OR
+	 * Redirect to /admin/dashboard/index
+	 * there should be a controller /admin/dashboard.php and a method index
+	 * there should be a view file in /views/admin/dashboard/index.php
+	 * 
+	 * @var string  
+	 */
+	public $landing = 'admin/auth/index';
+
+	/**
 	 * Construct
 	 */
 	public function __construct()
@@ -32,13 +50,13 @@ class Auth extends CI_Controller {
 	public function index()
 	{
 		//check 
-		if($this->basic_auth->is_logged())
+		if ($this->basic_auth->is_logged())
 		{
-			$this->load->view('admin/auth/index');
+			$this->load->view($this->landing);
 		}
 		else
-		{	
-			redirect('/admin/auth/login');
+		{
+			redirect('admin/auth/login');
 		}
 	}
 
@@ -51,7 +69,7 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_rules('password', 'password', 'required');
 
 		$this->basic_auth->change_password('admin@admin.com', 'password');
-		
+
 		if ($this->form_validation->run() === FALSE)
 		{
 			$this->load->view('admin/auth/login');
@@ -64,7 +82,7 @@ class Auth extends CI_Controller {
 
 			if ($result)
 			{
-				redirect('/admin/auth/');
+				redirect($this->landing);
 			}
 			else
 			{
@@ -81,7 +99,7 @@ class Auth extends CI_Controller {
 	public function logout()
 	{
 		$this->basic_auth->logout();
-		redirect('/admin');
+		redirect('/admin/auth/login');
 	}
 
 	/**
@@ -105,7 +123,7 @@ class Auth extends CI_Controller {
 			$reset_code = urlencode($email . '|') . md5($email . $salted_code);
 			$data['user_info'] = $user_info;
 			$data['reset_code'] = $reset_code;
-			$mail_body = $this->load->view('backend/auth/email/reset_password', $data, true);
+			$mail_body = $this->load->view('admin/auth/email/reset_password', $data, true);
 			//TODO: use CI email lib\
 			$headers = 'From: webmaster@example.com' . "\r\n" .
 					'Reply-To: webmaster@example.com' . "\r\n" .

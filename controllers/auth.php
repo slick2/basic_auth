@@ -16,7 +16,7 @@ class Auth extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->config('basic_auth');
 
-
+		
 		$this->load->library('form_validation');
 		$this->load->library('session');
 		$this->load->library('basic_auth');
@@ -24,7 +24,16 @@ class Auth extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('auth/index');
+		if ($this->basic_auth->is_logged())
+		{
+			// or redirect this to a landing like members or dashboard url
+			$this->load->view('auth/index');
+		}
+		else
+		{
+			redirect('auth/login');
+		}
+		
 	}
 
 	public function register()
@@ -199,11 +208,6 @@ class Auth extends CI_Controller {
 		}
 		$data['code_status'] = $code_status;
 		$this->load->view('auth/reset_confirm', $data);
-	}
-
-	public function change_password()
-	{
-		
 	}
 
 	public function status()

@@ -36,6 +36,13 @@ $config['salt'] = 'asdfasdfababasdgasdf';
 $config['email_activation'] = true;
 
 /**
+ * Folder on which has the email template
+ * 
+ */
+
+$config = 'auth/email';
+
+/**
  * tables
  */
 $config['tables'] = array('users' => 'users', 'groups' => 'groups');
@@ -46,7 +53,6 @@ $config['tables'] = array('users' => 'users', 'groups' => 'groups');
  * 2 = member
  */
 $config['default_group'] = 2;
-
 
 
 /**

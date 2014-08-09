@@ -1,9 +1,9 @@
 #Basic Auth 
 ***
 
-A basic authentication for codeigniter 2. That has three modes:
+A basic authentication library for Codeigniter 2. That has three modes:
 
-* Basic the password is not encrypted this would be good for those legacy code that are porting to codeigniter.
+* Basic the password is not encrypted this would be good for those legacy code that are porting to Codeigniter.
 
 * Medium the password is base64 encoded, do note that bas64 is not encryption it just some old codes use this just to hide the real password so that it cannot be read in the database.
 

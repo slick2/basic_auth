@@ -39,8 +39,7 @@ $config['email_activation'] = true;
  * Folder on which has the email template
  * 
  */
-
-$config = 'auth/email';
+$config['email_template_path'] = 'auth/email';
 
 /**
  * tables

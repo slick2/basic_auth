@@ -1,3 +1,5 @@
+<?php $this->load->view('common/header'); ?>
+
 <?php $this->load->view('auth/status'); ?>
 
 <h4>Login</h4>
@@ -21,3 +23,4 @@
 
 </form>
 
+<?php $this->load->view('common/footer'); ?>

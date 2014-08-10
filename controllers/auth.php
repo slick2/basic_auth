@@ -9,6 +9,18 @@ if (!defined('BASEPATH'))
  */
 class Auth extends CI_Controller {
 
+	/**
+	 *
+	 * @var string
+	 * After login we redirect to dashboard or members area.
+	 */
+	public $landing = 'auth/index';
+
+	/**
+	 * Method: __construct
+	 * Put here the helper and libraries needed but it is advisable if it is put
+	 * in application/config/autoload.php
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -16,26 +28,34 @@ class Auth extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->config('basic_auth');
 
-		
+
 		$this->load->library('form_validation');
 		$this->load->library('session');
 		$this->load->library('basic_auth');
 	}
 
+	/**
+	 * Method: index
+	 * the default on accessing /auth, whether we redirect to the logged on page
+	 * or prompt for login.
+	 */
 	public function index()
 	{
 		if ($this->basic_auth->is_logged())
 		{
 			// or redirect this to a landing like members or dashboard url
-			$this->load->view('auth/index');
+			redirect($this->landing);
 		}
 		else
 		{
 			redirect('auth/login');
 		}
-		
 	}
 
+	/**
+	 * Method: register
+	 * Used to register
+	 */
 	public function register()
 	{
 		if ($this->basic_auth->is_logged())
@@ -96,6 +116,9 @@ class Auth extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Method: login
+	 */
 	public function login()
 	{
 		$this->form_validation->set_rules('login', 'Login', 'required');
@@ -124,12 +147,18 @@ class Auth extends CI_Controller {
 		}
 	}
 
+	/**
+	 * Method: logout
+	 */
 	public function logout()
 	{
 		$this->basic_auth->logout();
-		redirect(base_url());
+		redirect($this->landing);
 	}
 
+	/**
+	 * Method: reset_password
+	 */
 	public function reset_password()
 	{
 		$data['email_sent'] = FALSE;
@@ -147,6 +176,9 @@ class Auth extends CI_Controller {
 			$reset_code = urlencode($email . '|') . md5($email . $salted_code);
 			$data['user_info'] = $user_info;
 			$data['reset_code'] = $reset_code;
+			/**
+			 * @todo mail should use codeigniter email library not the mail function
+			 */
 			$mail_body = $this->load->view('auth/email/reset_password', $data, true);
 			//TODO: use CI email lib\
 			$headers = 'From: webmaster@example.com' . "\r\n" .
@@ -162,11 +194,13 @@ class Auth extends CI_Controller {
 		$this->load->view('auth/reset_password', $data);
 	}
 
+	/**
+	 * Method: reset_confirm
+	 * @param string $code
+	 */
 	public function reset_confirm($code = null)
 	{
 		$code_status = FALSE;
-
-
 
 		if (empty($code))
 		{
@@ -210,11 +244,19 @@ class Auth extends CI_Controller {
 		$this->load->view('auth/reset_confirm', $data);
 	}
 
+	/**
+	 * Method: status
+	 */
 	public function status()
 	{
 		$this->load->view('auth/status');
 	}
 
+	/**
+	 * Metod: exist_email
+	 * @param string $email
+	 * @return boolean
+	 */
 	public function exist_email($email)
 	{
 		if (!$this->basic_auth->exist_email($email))
